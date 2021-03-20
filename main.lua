@@ -1,5 +1,6 @@
 require 'pad'
 require 'ball'
+require 'brick'
 require 'startGame'
 
 function love.load()
@@ -10,8 +11,14 @@ function love.load()
   -- place pad to bottom
   pad.positionY = windowHeight - (pad.height / 2)
   
+  -- place bricks
+  brick.width = (windowWidth / 15)
+  brick.height = 25
+  
   -- start game
   start()
+  
+  print(brick.grid)
 end
 
 
@@ -44,7 +51,7 @@ function love.update(dt)
   end
   
   if (ball.positionY + ball.radius) >= windowHeight then
-    start()
+    ball.sticky = true
   end
   
   if (ball.positionY + ball.radius) >= (pad.positionY - (pad.height / 2)) 
@@ -57,6 +64,23 @@ end
 
 
 function love.draw()
+  -- bricks grid
+  local row
+  local column
+  
+  brick.positionY = 0
+  for row = 1, 6 do
+    brick.positionX = 0
+    for column = 1, 15 do
+      if brick.grid[row][column] == 1 then
+        love.graphics.rectangle('fill', brick.positionX + 2, brick.positionY + 2, brick.width - 4, brick.height - 4)
+      end
+      brick.positionX = (brick.positionX + brick.width)
+    end
+    brick.positionY = (brick.positionY + brick.height)
+  end
+
+  
   -- pad (origin center)
   love.graphics.rectangle('fill', pad.positionX - (pad.width / 2), pad.positionY - (pad.height / 2), pad.width, pad.height) 
   
