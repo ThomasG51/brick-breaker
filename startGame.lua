@@ -15,5 +15,4 @@ function start()
       brick.grid[row][column] = 1
     end
   end
-
 end

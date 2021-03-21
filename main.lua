@@ -12,13 +12,12 @@ function love.load()
   pad.positionY = windowHeight - (pad.height / 2)
   
   -- place bricks
-  brick.width = (windowWidth / 15)
+  brick.count = 15
+  brick.width = (windowWidth / brick.count)
   brick.height = 25
   
-  -- start game
+  -- start new game
   start()
-  
-  print(brick.grid)
 end
 
 
@@ -32,6 +31,18 @@ function love.update(dt)
   else
     ball.positionX = ball.positionX + (ball.speedX * dt)
     ball.positionY = ball.positionY - (ball.speedY * dt)
+  end
+  
+  -- Brick collision
+  ball.rowHover = math.floor(ball.positionY / brick.height) + 1
+  ball.columnHover = math.floor(ball.positionX / brick.width) + 1
+  
+  if ball.rowHover >= 1 and ball.rowHover <= #brick.grid 
+  and ball.columnHover >= 1 and ball.columnHover <= brick.count then
+    if brick.grid[ball.rowHover][ball.columnHover] == 1 then
+      brick.grid[ball.rowHover][ball.columnHover] = 0
+      ball.speedY = -ball.speedY
+    end
   end
   
   -- ball rebound
@@ -80,12 +91,15 @@ function love.draw()
     brick.positionY = (brick.positionY + brick.height)
   end
 
-  
   -- pad (origin center)
   love.graphics.rectangle('fill', pad.positionX - (pad.width / 2), pad.positionY - (pad.height / 2), pad.width, pad.height) 
   
   -- ball
   love.graphics.circle('fill', ball.positionX, ball.positionY, ball.radius)
+  
+  -- Logs
+  love.graphics.print('row: '..ball.rowHover, 10, 500)
+  love.graphics.print('column: '..ball.columnHover, 10, 520)
 end
 
 

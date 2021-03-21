@@ -5,3 +5,5 @@ ball.radius = 10
 ball.sticky = false
 ball.speedX = 0
 ball.speedY = 0
+ball.rowHover = 0
+ball.columnHover = 0
